@@ -199,14 +199,16 @@
     let liquidMaterial = null;
 
     function createLiquidText() {
-        // Create canvas texture for text
+        // Create canvas texture for text - smaller size for mobile
+        const isMobile = window.innerWidth < 768;
         const textCanvas = document.createElement('canvas');
         const ctx = textCanvas.getContext('2d');
-        textCanvas.width = 2048;
-        textCanvas.height = 1024;
+        textCanvas.width = isMobile ? 1024 : 2048;
+        textCanvas.height = isMobile ? 512 : 1024;
+        const fontSize = isMobile ? 175 : 350;
 
         ctx.clearRect(0, 0, textCanvas.width, textCanvas.height);
-        ctx.font = '900 350px "Inter", sans-serif';
+        ctx.font = `900 ${fontSize}px "Inter", sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = '#ffffff';
@@ -342,6 +344,23 @@
         mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
         mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
     });
+
+    // Touch support for mobile
+    window.addEventListener('touchstart', (e) => {
+        const touch = e.touches[0];
+        targetMouse.x = touch.clientX / window.innerWidth;
+        targetMouse.y = 1.0 - (touch.clientY / window.innerHeight);
+        mouse.x = (touch.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(touch.clientY / window.innerHeight) * 2 + 1;
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+        const touch = e.touches[0];
+        targetMouse.x = touch.clientX / window.innerWidth;
+        targetMouse.y = 1.0 - (touch.clientY / window.innerHeight);
+        mouse.x = (touch.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(touch.clientY / window.innerHeight) * 2 + 1;
+    }, { passive: true });
 
     // ==========================================
     // ANIMATION LOOP

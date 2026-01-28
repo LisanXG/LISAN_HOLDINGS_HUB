@@ -491,19 +491,45 @@
         initFramebuffers();
         update();
 
-        // Green color palette for cursor (emerald, teal, lime hues)
+        // Helper to get random green color
+        function getRandomGreenColor() {
+            let r = Math.random();
+            if (r < 0.33) return { r: 0.1, g: 0.7, b: 0.4 };       // Emerald
+            else if (r < 0.66) return { r: 0.1, g: 0.6, b: 0.6 };  // Teal
+            else return { r: 0.3, g: 0.8, b: 0.2 };                // Lime
+        }
+
+        // Mouse support (desktop)
+        let lastMouseX = 0, lastMouseY = 0;
         window.addEventListener('mousemove', e => {
             if (!shouldRun()) return;
-
-            let r = Math.random();
-            let color;
-            // Green hues palette
-            if (r < 0.33) color = { r: 0.1, g: 0.7, b: 0.4 };       // Emerald
-            else if (r < 0.66) color = { r: 0.1, g: 0.6, b: 0.6 };  // Teal
-            else color = { r: 0.3, g: 0.8, b: 0.2 };                // Lime
-
-            splat(e.clientX, e.clientY, e.movementX * 5, -e.movementY * 5, color);
+            const dx = e.clientX - lastMouseX;
+            const dy = e.clientY - lastMouseY;
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+            splat(e.clientX, e.clientY, dx * 5, -dy * 5, getRandomGreenColor());
         });
+
+        // Touch support (mobile)
+        let lastTouchX = 0, lastTouchY = 0;
+        window.addEventListener('touchstart', e => {
+            if (!shouldRun()) return;
+            const touch = e.touches[0];
+            lastTouchX = touch.clientX;
+            lastTouchY = touch.clientY;
+            // Initial splash on touch
+            splat(touch.clientX, touch.clientY, 0, -10, getRandomGreenColor());
+        }, { passive: true });
+
+        window.addEventListener('touchmove', e => {
+            if (!shouldRun()) return;
+            const touch = e.touches[0];
+            const dx = touch.clientX - lastTouchX;
+            const dy = touch.clientY - lastTouchY;
+            lastTouchX = touch.clientX;
+            lastTouchY = touch.clientY;
+            splat(touch.clientX, touch.clientY, dx * 8, -dy * 8, getRandomGreenColor());
+        }, { passive: true });
 
         // Initial splash
         setTimeout(() => {
