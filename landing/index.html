@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LISAN HOLDINGS | Building the Future</title>
+    <meta name="description"
+        content="A diverse enterprise incubating real utility across finance, technology, and art. First tributary: LISAN INTELLIGENCE.">
+
+    <!-- Security: No tracking, no analytics, no external fonts that track -->
+    <meta name="referrer" content="no-referrer">
+
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>L</text></svg>">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Theme Controller (load early to prevent flash) -->
+    <script src="scripts/theme.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/base.css">
+
+    <style>
+        /* Page-specific styles */
+        .hero-branding {
+            font-size: clamp(4rem, 18vw, 14rem);
+            line-height: 0.85;
+            letter-spacing: -0.06em;
+            font-weight: 800;
+            text-align: center;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* Hide HTML text in dark mode - WebGL liquid text is shown instead */
+        [data-theme="dark"] .hero-branding {
+            opacity: 0;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            padding: var(--space-md) var(--space-lg);
+        }
+
+        .nav-inner {
+            max-width: 72rem;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-full);
+            background: var(--bg-glass);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--bg-glass-border);
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-weight: 600;
+            font-size: 0.9375rem;
+            color: var(--text-primary);
+        }
+
+        .nav-brand-icon {
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .nav-brand-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .nav-links {
+            display: none;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+        }
+
+        .nav-link {
+            padding: var(--space-sm) var(--space-md);
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-radius: var(--radius-full);
+            transition: all var(--transition-fast);
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+            background: var(--border-subtle);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-3xl) var(--space-lg);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 48rem;
+        }
+
+        .hero-tagline {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            color: var(--text-secondary);
+            margin-top: var(--space-xl);
+            line-height: 1.4;
+        }
+
+        /* Dark mode: add text shadow for readability */
+        [data-theme="dark"] .hero-tagline {
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8), 0 0 40px rgba(1, 20, 24, 0.9);
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: var(--space-xl);
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-sm);
+            opacity: 0.4;
+        }
+
+        .hero-scroll-text {
+            font-size: 0.5625rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-tertiary);
+        }
+
+        .hero-scroll-line {
+            width: 1px;
+            height: 2rem;
+            background: linear-gradient(to bottom, transparent, var(--accent-primary), transparent);
+        }
+
+        /* Content Sections */
+        .content-bg {
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border-subtle);
+            box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.03);
+        }
+
+        /* About Section */
+        .about-card {
+            padding: var(--space-2xl);
+            border-radius: var(--radius-xl);
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-subtle);
+        }
+
+        @media (min-width: 768px) {
+            .about-card {
+                padding: var(--space-3xl);
+            }
+        }
+
+        .about-grid {
+            display: grid;
+            gap: var(--space-2xl);
+        }
+
+        @media (min-width: 768px) {
+            .about-grid {
+                grid-template-columns: 1fr 2fr;
+            }
+        }
+
+        .about-profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .about-profile {
+                align-items: flex-start;
+                text-align: left;
+                border-right: 1px solid var(--border-subtle);
+                padding-right: var(--space-2xl);
+            }
+        }
+
+        .about-avatar {
+            width: 14rem;
+            height: 14rem;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--border-subtle);
+            margin-bottom: var(--space-lg);
+            position: relative;
+            cursor: pointer;
+            transition: all var(--transition-medium);
+        }
+
+        .about-avatar::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-primary);
+            opacity: 0;
+            animation: avatar-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes avatar-pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+
+            50% {
+                transform: scale(1.05);
+                opacity: 0.6;
+            }
+        }
+
+        .about-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(0.5) brightness(0.9);
+            transition: all var(--transition-slow);
+        }
+
+        .about-avatar:hover img {
+            filter: grayscale(0) brightness(1);
+            transform: scale(1.02);
+        }
+
+        .about-name {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+        }
+
+        .about-title {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .about-bio {
+            font-size: 1.0625rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .about-bio p {
+            margin-bottom: var(--space-md);
+        }
+
+        .about-bio strong {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .about-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+            margin-top: var(--space-lg);
+        }
+
+        .about-tag {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-sm) var(--space-md);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        /* Projects Grid */
+        .projects-header {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+            margin-bottom: var(--space-2xl);
+        }
+
+        @media (min-width: 768px) {
+            .projects-header {
+                flex-direction: row;
+                align-items: flex-end;
+                justify-content: space-between;
+            }
+        }
+
+        .projects-title {
+            font-size: 2rem;
+            font-weight: 500;
+        }
+
+        .projects-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            max-width: 28rem;
+        }
+
+        .projects-grid {
+            display: grid;
+            gap: var(--space-lg);
+        }
+
+        @media (min-width: 768px) {
+            .projects-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .project-card {
+            position: relative;
+            height: 24rem;
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-subtle);
+            transition: all var(--transition-medium);
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--border-medium);
+        }
+
+        .project-card.featured {
+            grid-column: span 2;
+        }
+
+        @media (max-width: 767px) {
+            .project-card.featured {
+                grid-column: span 1;
+            }
+        }
+
+        .project-image {
+            position: absolute;
+            inset: 0;
+            height: 70%;
+            overflow: hidden;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.7;
+            filter: grayscale(0.3);
+            transition: all var(--transition-slow);
+        }
+
+        .project-card:hover .project-image img {
+            opacity: 0.9;
+            filter: grayscale(0);
+            transform: scale(1.05);
+        }
+
+        .project-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 50%, var(--bg-tertiary));
+        }
+
+        .project-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: var(--space-lg);
+            background: var(--bg-tertiary);
+        }
+
+        .project-badge {
+            display: inline-block;
+            padding: var(--space-xs) var(--space-sm);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            font-size: 0.625rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .project-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+        }
+
+        .project-desc {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .project-link {
+            position: absolute;
+            top: var(--space-md);
+            right: var(--space-md);
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-glass);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 50%;
+            color: var(--text-primary);
+            opacity: 0;
+            transform: translateY(4px);
+            transition: all var(--transition-fast);
+        }
+
+        .project-card:hover .project-link {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-link:hover {
+            background: var(--accent-primary);
+            color: var(--text-inverse);
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: var(--space-3xl) var(--space-lg);
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .contact-inner {
+            max-width: 48rem;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-title {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 500;
+            margin-bottom: var(--space-xl);
+        }
+
+        .contact-title span {
+            font-family: var(--font-serif);
+            font-style: italic;
+            opacity: 0.6;
+        }
+
+        .contact-email-wrap {
+            display: inline-flex;
+            align-items: center;
+            padding: var(--space-xs);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-full);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .contact-email {
+            padding: var(--space-md) var(--space-xl);
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-full);
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .contact-send {
+            margin-left: var(--space-sm);
+        }
+
+        .contact-socials {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            margin-top: var(--space-2xl);
+        }
+
+        .contact-social {
+            width: 2.75rem;
+            height: 2.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-subtle);
+            border-radius: 50%;
+            color: var(--text-secondary);
+            transition: all var(--transition-fast);
+        }
+
+        .contact-social:hover {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            padding: var(--space-xl) var(--space-lg);
+            border-top: 1px solid var(--border-subtle);
+            background: var(--bg-primary);
+        }
+
+        .footer-inner {
+            max-width: 80rem;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8125rem;
+            color: var(--text-tertiary);
+        }
+
+        .footer-status {
+            font-family: monospace;
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Visual Engine (WebGL Background) -->
+    <div id="visual-engine">
+        <canvas id="fluid-canvas"></canvas>
+        <canvas id="gl-canvas"></canvas>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="#" class="nav-brand">
+                <div class="nav-brand-icon"><img src="assets/avatar.png" alt="Lisan"></div>
+                <span>LISAN HOLDINGS</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="#about" class="nav-link">About</a>
+                <a href="#projects" class="nav-link">Tech Archive</a>
+                <a href="#contact" class="btn btn-primary">Get in touch</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content animate-fadeInUp">
+            <h1 class="hero-branding text-gradient">LISAN</h1>
+
+            <p class="hero-tagline">
+                A diverse enterprise incubating real utility across finance, technology, and art.
+            </p>
+        </div>
+
+        <div class="hero-scroll">
+            <span class="hero-scroll-text">Scroll</span>
+            <div class="hero-scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="content-layer content-bg">
+
+        <!-- About Section -->
+        <section id="about" class="section">
+            <div class="container">
+                <div class="about-card">
+                    <div class="about-grid">
+                        <div class="about-profile">
+                            <div class="about-avatar">
+                                <img src="assets/avatar.png" alt="Founder">
+                            </div>
+                            <h2 class="about-name">Lisan</h2>
+                            <p class="about-title">Founder & Architect</p>
+                        </div>
+
+                        <div class="about-content">
+                            <div class="about-bio">
+                                <p>
+                                    Before I wrote a line of code, I served in <strong>US Navy Special Forces</strong>
+                                    as a <em>Systems Administrator</em> and <em>Reaction Force Team Leader</em>. In that
+                                    life, "intelligence" wasn't a buzzword—it was the <strong>difference between a
+                                        successful mission and a catastrophic failure</strong>.
+                                </p>
+                                <p>
+                                    You learned to <em>filter out the noise</em>, <strong>identify the signal</strong>,
+                                    and act with <em>absolute conviction</em>. You didn't rely on black boxes; you
+                                    relied on <strong>verified data</strong> and your team.
+                                </p>
+                                <p>
+                                    When I entered the world of defense contracting and web development, I saw a digital
+                                    landscape that was <em>chaotic, opaque, and undisciplined</em>. I saw "tools" that
+                                    were <strong>expensive gated communities</strong> and "signals" that were little
+                                    more than <em>paid noise</em>.
+                                </p>
+                                <p>
+                                    <strong>In comes: LISAN HOLDINGS.</strong> This isn't just another project. My
+                                    vision is to build a <em>legitimate, diverse enterprise</em>—an LLC that incubates
+                                    <strong>real utility</strong> across finance, technology, and art. We are building
+                                    tributaries, and we plan to <em>let them flow</em>.
+                                </p>
+                            </div>
+
+                            <div class="about-tags">
+                                <div class="about-tag">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="1.5">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                    </svg>
+                                    Special Warfare / InfoSys
+                                </div>
+                                <div class="about-tag">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="1.5">
+                                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                    </svg>
+                                    Finance & BD
+                                </div>
+                                <div class="about-tag">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="1.5">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                                        <path
+                                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                                        </path>
+                                    </svg>
+                                    Global Remote
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="section">
+            <div class="container">
+                <div class="projects-header">
+                    <div>
+                        <span class="badge" style="margin-bottom: var(--space-sm);">Portfolio</span>
+                        <h2 class="projects-title">Tech Archive</h2>
+                        <p class="projects-subtitle">
+                            High-performance solutions engineered to solve complex problems with military-grade
+                            precision.
+                        </p>
+                    </div>
+                    <a href="#" class="link"
+                        style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem;">
+                        View Repository
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="projects-grid">
+                    <!-- LISAN INTELLIGENCE (Featured) -->
+                    <div class="project-card featured">
+                        <div class="project-image">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80"
+                                alt="LISAN INTELLIGENCE">
+                        </div>
+                        <div class="project-content">
+                            <span class="project-badge">First Project • Coming Soon</span>
+                            <h3 class="project-name">LISAN INTELLIGENCE</h3>
+                            <p class="project-desc">Institutional-grade market signal intelligence platform.
+                                Multi-source data synthesis, advanced technical analysis, and triple-blind audit
+                                committee.</p>
+                        </div>
+                        <a href="#" class="project-link" title="Coming Soon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <line x1="7" y1="17" x2="17" y2="7"></line>
+                                <polyline points="7 7 17 7 17 17"></polyline>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- Placeholder Projects -->
+                    <div class="project-card">
+                        <div class="project-image">
+                            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80"
+                                alt="Future Project">
+                        </div>
+                        <div class="project-content">
+                            <span class="project-badge">Coming Soon</span>
+                            <h3 class="project-name">Strike Protocol</h3>
+                            <p class="project-desc">High-frequency infrastructure for mission-critical operations.</p>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-image">
+                            <img src="https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?w=800&q=80"
+                                alt="Future Project">
+                        </div>
+                        <div class="project-content">
+                            <span class="project-badge">Coming Soon</span>
+                            <h3 class="project-name">Tactical Mesh</h3>
+                            <p class="project-desc">Decentralized communication protocol.</p>
+                        </div>
+                    </div>
+
+                    <div class="project-card featured">
+                        <div class="project-image">
+                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&q=80"
+                                alt="Future Project">
+                        </div>
+                        <div class="project-content">
+                            <span class="project-badge">Coming Soon</span>
+                            <h3 class="project-name">Digital Art Tributaries</h3>
+                            <p class="project-desc">Creative expressions bridging technology and art. Curated
+                                collections and generative systems.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact">
+            <div class="contact-inner">
+                <h2 class="contact-title">Let's build <span>together.</span></h2>
+
+                <div class="contact-email-wrap">
+                    <span class="contact-email">lisanxgaeb@gmail.com</span>
+                    <a href="mailto:lisanxgaeb@gmail.com" class="btn btn-primary contact-send">
+                        Send Mail
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="contact-socials">
+                    <a href="#" class="contact-social" aria-label="X (Twitter)">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z">
+                            </path>
+                        </svg>
+                    </a>
+                    <a href="#" class="contact-social" aria-label="GitHub">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path
+                                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                            </path>
+                        </svg>
+                    </a>
+                    <a href="#" class="contact-social" aria-label="LinkedIn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z">
+                            </path>
+                            <rect x="2" y="9" width="4" height="12"></rect>
+                            <circle cx="4" cy="4" r="2"></circle>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-inner">
+                <span>© 2026 LISAN HOLDINGS</span>
+                <span class="footer-status">System Status: Online</span>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" aria-label="Toggle theme" title="Click to toggle, double-click for auto mode">
+        <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.5">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.5">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
+    <!-- WebGL Engines -->
+    <script src="scripts/fluid-simulation.js"></script>
+    <script src="scripts/webgl-engine.js"></script>
+</body>
+
+</html>
