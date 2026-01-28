@@ -1,6 +1,6 @@
 /**
  * LISAN HOLDINGS - Fluid Simulation (Light Mode)
- * Interactive ink/smoke cursor effect with pink/blue/magenta colors
+ * Interactive ink/smoke cursor effect with green colors
  */
 
 (function () {
@@ -8,7 +8,10 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         const canvas = document.getElementById('fluid-canvas');
-        if (!canvas) return;
+        if (!canvas) {
+            console.warn('Fluid canvas not found');
+            return;
+        }
 
         // Only run in light mode
         function shouldRun() {
@@ -21,6 +24,8 @@
             return;
         }
 
+        console.log('Fluid simulation WebGL initialized');
+
         // Get floating point extension
         const ext = {
             halfFloatTexType: gl.getExtension('OES_texture_half_float')
@@ -29,16 +34,19 @@
         };
         gl.getExtension('OES_texture_half_float_linear');
 
-        // Configuration
+        // Mobile detection
+        const isMobile = window.innerWidth < 768;
+
+        // Configuration - reduced resolution for mobile
         let config = {
-            SIM_RESOLUTION: 128,
-            DYE_RESOLUTION: 1024,
+            SIM_RESOLUTION: isMobile ? 64 : 128,
+            DYE_RESOLUTION: isMobile ? 512 : 1024,
             DENSITY_DISSIPATION: 2.5,
             VELOCITY_DISSIPATION: 1.0,
             PRESSURE: 0.8,
-            PRESSURE_ITERATIONS: 20,
+            PRESSURE_ITERATIONS: isMobile ? 10 : 20,
             CURL: 20,
-            SPLAT_RADIUS: 0.15,
+            SPLAT_RADIUS: isMobile ? 0.2 : 0.15,
             SPLAT_FORCE: 3000,
         };
 

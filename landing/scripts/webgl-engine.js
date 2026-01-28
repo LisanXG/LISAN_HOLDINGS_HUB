@@ -9,16 +9,34 @@
     'use strict';
 
     const canvas = document.querySelector('#gl-canvas');
-    if (!canvas) return;
+    if (!canvas) {
+        console.warn('WebGL canvas not found');
+        return;
+    }
 
-    // Initialize renderer
-    const renderer = new THREE.WebGLRenderer({
-        canvas,
-        alpha: true,
-        antialias: true
-    });
+    // Check WebGL support
+    let renderer;
+    try {
+        renderer = new THREE.WebGLRenderer({
+            canvas,
+            alpha: true,
+            antialias: window.innerWidth > 768, // Disable antialiasing on mobile for performance
+            powerPreference: 'high-performance'
+        });
+    } catch (e) {
+        console.warn('WebGL initialization failed:', e);
+        return;
+    }
+
+    if (!renderer) {
+        console.warn('WebGL renderer not available');
+        return;
+    }
+
+    console.log('WebGL initialized successfully');
+
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // Lower pixel ratio on mobile
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.0;
 
