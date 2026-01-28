@@ -43,9 +43,22 @@
             user-select: none;
         }
 
-        /* Hide HTML text in dark mode - WebGL liquid text is shown instead */
-        [data-theme="dark"] .hero-branding {
-            opacity: 0;
+        /* Hide HTML text in dark mode on DESKTOP only - WebGL liquid text is shown instead */
+        @media (min-width: 769px) {
+            [data-theme="dark"] .hero-branding {
+                opacity: 0;
+            }
+        }
+
+        /* Mobile dark mode: show HTML text with CSS gradient effect (WebGL fallback) */
+        @media (max-width: 768px) {
+            [data-theme="dark"] .hero-branding {
+                opacity: 1;
+                background: linear-gradient(135deg, #22d3ee 0%, #14b8a6 50%, #8b5cf6 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
         }
 
         /* Navigation */
