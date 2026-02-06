@@ -6,6 +6,7 @@ Landing page and projects for LISAN Holdings.
 
 - `landing/` — Corporate site at [lisanholdings.dev](https://lisanholdings.dev)
 - `intelligence/` — Crypto signal platform at [lisanintel.com](https://lisanintel.com)
+- `tradingview/` — LISAN SCORE PineScript indicator for TradingView
 
 ## License
 
