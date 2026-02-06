@@ -1,31 +1,15 @@
-# Lisan
+## Lisan
 
-> Navy veteran. Former defense contractor. Now building in the open.
+I spent years in Navy Special Warfare and defense contracting. Now I build tools in the open.
 
-I work solo, paired with AI, shipping products that solve real problems.
-
----
-
-## Live Projects
-
-| Project | Description |
-|---------|-------------|
-| **[LISAN INTELLIGENCE](https://lisanintel.com)** | Quantitative crypto signal platform with 14-indicator scoring engine |
+Working solo. Shipping products. Learning in public.
 
 ---
 
-## Tech
+**What's live:**
 
-`TypeScript` `Next.js` `React` `Node.js` `Web3`
-
----
-
-## Links
-
-- 🌐 [lisanholdings.dev](https://lisanholdings.dev)
-- 🔗 [lisanintel.com](https://lisanintel.com)
-- 𝕏 [@Lisantherealone](https://x.com/Lisantherealone)
+[LISAN INTELLIGENCE](https://lisanintel.com) — Crypto signal engine. 14 indicators. Free.
 
 ---
 
-*The work speaks.*
+[lisanholdings.dev](https://lisanholdings.dev) · [@Lisantherealone](https://x.com/Lisantherealone)
