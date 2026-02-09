@@ -8,7 +8,7 @@ Working solo. Shipping products. Learning in public.
 
 **What's live:**
 
-[LISAN INTELLIGENCE](https://lisanintel.com) — Crypto signal engine. 14 indicators. Free.
+[LISAN INTELLIGENCE](https://lisanintel.com) — Crypto signal engine. 17 indicators. Free.
 
 ---
 
